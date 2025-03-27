@@ -179,7 +179,6 @@ class MessageHistoryGroupCard extends StatelessWidget {
             ),
           ],
           content: SizedBox(
-            height: 400,
             width: 300,
             child: _popupContent(
               testStyle: TextStyle(color: AppPallete.backgroundColor),

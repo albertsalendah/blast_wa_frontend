@@ -75,6 +75,7 @@ class _ChatPageState extends State<ChatPage> {
       listener: (context, state) {
         if (state is SendMessageSuccess) {
           messageController.clear();
+          _selectedCountryCode = null;
           setState(() {});
         }
       },

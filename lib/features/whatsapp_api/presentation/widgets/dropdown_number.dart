@@ -97,7 +97,7 @@ class _DropdownNumberState extends State<DropdownNumber> {
                   ),
                   const SizedBox(width: 8),
                   Container(
-                    width: 220,
+                    width: 180,
                     height: 32,
                     decoration: BoxDecoration(
                         color: AppPallete.white,
@@ -109,21 +109,20 @@ class _DropdownNumberState extends State<DropdownNumber> {
                             : listNumber.isNotEmpty
                                 ? listNumber.first
                                 : null,
-                        padding: EdgeInsets.symmetric(horizontal: 8),
+                        // padding: EdgeInsets.symmetric(horizontal: 4),
                         isExpanded: true,
                         items: listNumber.map((clientId) {
                           return DropdownMenuItem(
                             value: clientId,
                             child: Row(
                               children: [
-                                Icon(Icons.add),
                                 Expanded(
                                   flex: 1,
                                   child: SizedBox(
-                                    height: 30,
+                                    height: 22,
                                     child: Text(
-                                      clientId,
-                                      style: TextStyle(fontSize: 18),
+                                      ' +$clientId',
+                                      style: TextStyle(fontSize: 16),
                                     ),
                                   ),
                                 ),
@@ -163,7 +162,7 @@ class _DropdownNumberState extends State<DropdownNumber> {
                   ProgressButton(
                       messageProgress: state.messageProgress,
                       onTapProgress: widget.onTapProgress),
-                  const SizedBox(width: 8),
+                  // const SizedBox(width: 8),
                   DisconnectButton(
                     visibility: connectedClients.isNotEmpty,
                     numConnected: connectedClients.length,
