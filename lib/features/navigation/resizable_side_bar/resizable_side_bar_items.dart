@@ -11,12 +11,14 @@ part 'resizable_side_bar_item_contents.dart';
 class ResizableSideBarExpandedItem extends StatefulWidget
     implements ResizableSideBarItemBase {
   final String title;
-  final IconData icon;
+  final Widget Function(Color? color) icon;
+  final VoidCallback? onTap;
   final List<ResizableSideBarItem> children;
   const ResizableSideBarExpandedItem({
     super.key,
     required this.title,
     required this.icon,
+    this.onTap,
     required this.children,
   });
 
@@ -41,11 +43,13 @@ class ResizableSideBarExpandedItem extends StatefulWidget
 class ResizableSideBarItem extends StatefulWidget
     implements ResizableSideBarItemBase {
   final String title;
-  final IconData icon;
+  final Widget Function(Color? color) icon;
+  final VoidCallback? onTap;
   const ResizableSideBarItem({
     super.key,
     required this.icon,
     required this.title,
+    this.onTap,
   });
 
   @override

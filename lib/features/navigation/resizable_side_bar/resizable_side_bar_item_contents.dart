@@ -7,7 +7,7 @@ class _ResizableSideBarExpandedItemConten extends StatefulWidget {
   final int index;
   final List<ResizableSideBarItem> children;
   final String title;
-  final IconData icon;
+  final Widget Function(Color? color) icon;
   const _ResizableSideBarExpandedItemConten({
     required this.index,
     required this.children,
@@ -112,7 +112,7 @@ class _ResizableSideBarItemContent extends StatefulWidget {
   final int index;
   final int? parentIndex;
   final String title;
-  final IconData icon;
+  final Widget Function(Color? color) icon;
   const _ResizableSideBarItemContent({
     required this.index,
     this.parentIndex,
@@ -165,7 +165,7 @@ class _ResizableSideBarItemContentState
 }
 
 Widget _resizableSidebarItemContainer({
-  required IconData icon,
+  required Widget Function(Color? color) icon,
   required String title,
   required ResizableSharedPropertiesInjector shared,
   required bool isHovered,
@@ -190,14 +190,23 @@ Widget _resizableSidebarItemContainer({
     ),
     child: Row(
       children: [
-        Icon(
-          icon,
-          color: shared.iconColor != null
+        // Icon(
+        //   icon,
+        //   color: shared.iconColor != null
+        //       ? (isSelected ? shared.menuBackgroundColor : shared.iconColor)
+        //       : (isSelected
+        //           ? shared.menuBackgroundColor
+        //           : shared.textStyle?.color),
+        //   size: shared.iconSize,
+        // ),
+        SizedBox(
+          height: shared.iconSize,
+          width: shared.iconSize,
+          child: icon(shared.iconColor != null
               ? (isSelected ? shared.menuBackgroundColor : shared.iconColor)
               : (isSelected
                   ? shared.menuBackgroundColor
-                  : shared.textStyle?.color),
-          size: shared.iconSize,
+                  : shared.textStyle?.color)),
         ),
         const SizedBox(width: 8),
         Expanded(

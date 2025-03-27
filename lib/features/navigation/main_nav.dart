@@ -41,11 +41,17 @@ class _MainNavState extends State<MainNav> {
     storage = serviceLocator<FlutterSecureStorage>();
     menuList = [
       ResizableSideBarItem(
-        icon: Icons.home,
+        icon: (color) => Icon(
+          Icons.home,
+          color: color,
+        ),
         title: 'Home',
       ),
       ResizableSideBarItem(
-        icon: Icons.history,
+        icon: (color) => Icon(
+          Icons.history,
+          color: color,
+        ),
         title: 'History',
       ),
     ];
