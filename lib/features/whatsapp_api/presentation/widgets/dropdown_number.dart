@@ -109,7 +109,6 @@ class _DropdownNumberState extends State<DropdownNumber> {
                             : listNumber.isNotEmpty
                                 ? listNumber.first
                                 : null,
-                        // padding: EdgeInsets.symmetric(horizontal: 4),
                         isExpanded: true,
                         items: listNumber.map((clientId) {
                           return DropdownMenuItem(

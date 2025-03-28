@@ -24,8 +24,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
-    emailController.text = 'test@mail.com';
-    passwordController.text = '1234';
     super.initState();
   }
 
