@@ -18,10 +18,12 @@ import 'package:whatsapp_blast/core/utils/constants/constants.dart';
 import 'package:whatsapp_blast/features/whatsapp_api/domain/entities/message_progress.dart';
 import '../../../../core/errors/exceptions.dart';
 import '../../presentation/bloc/websocket_cubit.dart';
+import '../../presentation/bloc/whatsapp_bloc.dart';
 import '../models/phone_number_model.dart';
 
 abstract interface class WebSocketRemoteDataSource {
   void connectClient({required String clientId});
+  bool get isNewLogin;
   void disconnectClient({required String clientId});
   List<MessageProgress> getMessageProgess({required String clientId});
   Map<String, IOWebSocketChannel> get connectedClients;
@@ -45,13 +47,13 @@ abstract interface class WebSocketRemoteDataSource {
 }
 
 class WebSocketRemoteDataSourceImpl implements WebSocketRemoteDataSource {
+  bool _isNewLogin = false;
   final Map<String, IOWebSocketChannel> _clients = {};
   final Map<String, List<MessageProgress>> _messageProgress = {};
   final Map<String, Timer?> _reconnectTimers = {}; // 🔹 Handle auto-reconnect
   final Map<String, bool> _idAssigned = {}; // 🔹 Tracks if ID is already set
   final Map<String, String> _qrData = {};
-  final Map<String, ConnectionStatus> _connectionStatus =
-      {}; // 🔹 Track WhatsApp connection status
+  final Map<String, ConnectionStatus> _connectionStatus = {};
 
   WebSocketCubit? webSocketCubitInstance; // Add a reference to WebSocketCubit
   final Dio client;
@@ -140,6 +142,9 @@ class WebSocketRemoteDataSourceImpl implements WebSocketRemoteDataSource {
 
   @override
   Map<String, ConnectionStatus> get connectionStatus => _connectionStatus;
+
+  @override
+  bool get isNewLogin => _isNewLogin;
 
   @override
   Future<List<PhoneNumberModel>> getPhoneNumbers(
@@ -324,7 +329,7 @@ class WebSocketRemoteDataSourceImpl implements WebSocketRemoteDataSource {
         final data = jsonDecode(event);
 
         if (data['type'] == 'idSet' && data['id'] == clientId) {
-          _idAssigned[clientId] = true; // 🔹 Mark as assigned
+          _idAssigned[clientId] = true;
           if (email.isNotEmpty) {
             final msg = jsonEncode({
               "type": "connectWhatsApp",
@@ -355,11 +360,19 @@ class WebSocketRemoteDataSourceImpl implements WebSocketRemoteDataSource {
           _stopReconnection(clientId: oldId);
           _attemptConnection(clientId: newId);
           _notifyCubit(clientId: newId);
+          if (data['newId'] != null && email.isNotEmpty) {
+            serviceLocator<WhatsappBloc>()
+                .add(GetUserPhoneNumbersEvent(email: email));
+          }
         }
 
         if (data['type'] == 'disconnect') {
           log('Client with Id : ${data['clientId']} has disconnect');
           _connectionStatus[clientId] = ConnectionStatus.close;
+        }
+
+        if (data['type'] == 'newLogin') {
+          _isNewLogin = data['isNewLogin'];
         }
 
         if (data['type'] == 'connectionStatus') {

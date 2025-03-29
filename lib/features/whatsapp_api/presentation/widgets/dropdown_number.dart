@@ -50,21 +50,14 @@ class _DropdownNumberState extends State<DropdownNumber> {
         if (state is GetPhoneSuccess) {
           listNumber = state.listNumbers.map((e) => e.whatsappNumber).toList();
           setState(() {});
-          // if (listNumber.isNotEmpty && selectedClient.isEmpty) {
-          //   context
-          //       .read<WebSocketCubit>()
-          //       .connectClient(clientId: listNumber.first);
-          // }
         }
       },
       child: BlocConsumer<WebSocketCubit, WebSocketState>(
         listener: (context, state) {
-          if (state.connectionStatus[state.selectedClient] ==
-                  ConnectionStatus.open &&
-              email.isNotEmpty) {
-            // context
-            //     .read<WhatsappBloc>()
-            //     .add(GetUserPhoneNumbersEvent(email: email));
+          if (state.isNewLogin && email.isNotEmpty) {
+            context
+                .read<WhatsappBloc>()
+                .add(GetUserPhoneNumbersEvent(email: email));
           }
         },
         builder: (context, state) {

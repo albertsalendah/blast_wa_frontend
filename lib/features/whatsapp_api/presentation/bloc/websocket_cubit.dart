@@ -5,6 +5,7 @@ import 'package:whatsapp_blast/features/whatsapp_api/domain/entities/message_pro
 import '../../data/datasources/web_socket_remote_data_source.dart';
 
 class WebSocketState {
+  bool isNewLogin;
   final List<String> connectedClients;
   final String selectedClient;
   List<MessageProgress> messageProgress;
@@ -12,7 +13,8 @@ class WebSocketState {
   final Map<String, String> qrData;
 
   WebSocketState(
-      {required this.connectedClients,
+      {required this.isNewLogin,
+      required this.connectedClients,
       required this.selectedClient,
       required this.messageProgress,
       required this.qrData,
@@ -24,6 +26,7 @@ class WebSocketCubit extends Cubit<WebSocketState> {
 
   WebSocketCubit({required this.repository})
       : super(WebSocketState(
+          isNewLogin: false,
           connectedClients: [],
           selectedClient: '',
           messageProgress: [],
@@ -67,6 +70,7 @@ class WebSocketCubit extends Cubit<WebSocketState> {
 
   void updateState({String? clientId}) {
     emit(WebSocketState(
+      isNewLogin: repository.isNewLogin,
       connectedClients: repository.connectedClients.keys.toList(),
       selectedClient: clientId ?? state.selectedClient,
       messageProgress: repository.getMessageProgess(

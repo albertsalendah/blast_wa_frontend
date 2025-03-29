@@ -110,7 +110,7 @@ class _MainNavState extends State<MainNav> {
                     HomePage(),
                     HistoryPage(),
                   ],
-                  title: user?.email,
+                  title: user?.name ?? '',
                   backgroundColor: AppPallete.green,
                   textStyle: TextStyle(color: Colors.white),
                   footerIcon: Icons.logout,
@@ -121,14 +121,14 @@ class _MainNavState extends State<MainNav> {
                   onFooterTap: () {
                     context.read<AuthBloc>().add(LogoutEvent(message: ''));
                   },
-                  header: (size) {
-                    return CircleAvatar(
-                      child: Icon(
-                        Icons.person,
-                        size: size * 0.8,
-                      ),
-                    );
-                  },
+                  // header: (size) {
+                  //   return CircleAvatar(
+                  //     child: Icon(
+                  //       Icons.person,
+                  //       size: size * 0.8,
+                  //     ),
+                  //   );
+                  // },
                 )
               ],
             );
